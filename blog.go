@@ -1,12 +1,12 @@
 package main
 
 import (
-	t "github.com/TyphoonMC/TyphoonCore"
-	"log"
-	"io/ioutil"
-	"github.com/a8m/mark"
-	"fmt"
 	"bytes"
+	"fmt"
+	t "github.com/TyphoonMC/TyphoonCore"
+	"github.com/a8m/mark"
+	"io/ioutil"
+	"log"
 )
 
 func main() {
@@ -26,7 +26,6 @@ func main() {
 			if err != nil {
 				panic(err)
 			}
-			fmt.Println(MinecraftRender(string(data)))
 			e.Player.SendBukkitMessage(MinecraftRender(string(data)))
 		}
 	})
@@ -43,10 +42,14 @@ func MinecraftRender(article string) string {
 		h, _ := node.(*mark.HeadingNode)
 		format := ""
 		switch h.Level {
-		case 1: format = "&6&l&n"
-		case 2: format = "&6&l"
-		case 3: format = "&6&n"
-		case 4: format = "&e&n"
+		case 1:
+			format = "&6&l&n"
+		case 2:
+			format = "&6&l"
+		case 3:
+			format = "&6&n"
+		case 4:
+			format = "&e&n"
 		}
 		return fmt.Sprintf("%s%s&r\n", format, h.Text)
 	})
