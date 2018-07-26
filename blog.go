@@ -14,23 +14,47 @@ func main() {
 	core.SetBrand("typhoonblog")
 
 	core.On(func(e *t.PlayerJoinEvent) {
-		articlesDir := "./articles"
-
-		files, err := ioutil.ReadDir(articlesDir)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		for _, file := range files {
-			data, err := ioutil.ReadFile(articlesDir + "/" + file.Name())
-			if err != nil {
-				panic(err)
-			}
-			e.Player.SendBukkitMessage(MinecraftRender(string(data)))
-		}
+		e.Player.SendMessage(t.ChatMessage("Welcome to my blog !"))
 	})
 
+	core.DeclareCommand(t.CommandNodeLiteral(
+		"article",
+		[]*t.CommandNode{
+			t.CommandNodeLiteral(
+				"read",
+				[]*t.CommandNode{
+					t.CommandNodeLiteral(
+						"all",
+						nil,
+						func(player *t.Player, args []string) {
+							SendArticles(player)
+						},
+					),
+				},
+				nil,
+			),
+		},
+		nil,
+	))
+
 	core.Start()
+}
+
+func SendArticles(player *t.Player) {
+	articlesDir := "./articles"
+
+	files, err := ioutil.ReadDir(articlesDir)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, file := range files {
+		data, err := ioutil.ReadFile(articlesDir + "/" + file.Name())
+		if err != nil {
+			panic(err)
+		}
+		player.SendBukkitMessage(MinecraftRender(string(data)))
+	}
 }
 
 func MinecraftRender(article string) string {
